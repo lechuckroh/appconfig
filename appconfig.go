@@ -7,6 +7,6 @@ var ActiveProfileEnvName = "app.profiles.active"
 var ConfigFilenamePrefix = "application"
 
 // LoadConfig loads configuration
-func LoadConfig(configFilename string) (interface{}, error) {
-	return nil, nil
+func LoadConfig(configFilename string, to interface{}) error {
+	return nil
 }

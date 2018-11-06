@@ -43,7 +43,7 @@ func fileExists(filename string) bool {
 // 6. 'application.yaml'
 //
 // 7. 'config/application-{profile}.yaml'
-func LoadConfig(configFilename string, to interface{}) error {
+func LoadConfig(configFilename string, to interface{}) ([]string, error) {
 	var lookupFiles []string
 
 	// Specific file
@@ -84,5 +84,10 @@ func LoadConfig(configFilename string, to interface{}) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	return loader.Load(ctx, to)
+	var backendNames []string
+	for _, b := range backends {
+		backendNames = append(backendNames, b.Name())
+	}
+
+	return backendNames, loader.Load(ctx, to)
 }

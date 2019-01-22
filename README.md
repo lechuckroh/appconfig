@@ -52,18 +52,17 @@ package appconfig
 
 import (
 	"fmt"
-    "os"
-    
-    "github.com/lechuckroh/appconfig"
+	"github.com/lechuckroh/appconfig"
+	"os"
 )
 
 type Config struct {
-    Name   string `config:"name"`
-    Age    int    `config:"age"`
-    Nested struct {
-        Name string `config:"nested.name"`
-        Age  int    `config:"nested.age"`
-    }
+	Name   string `config:"name"`
+	Age    int    `config:"age"`
+	Nested struct {
+		Name string `config:"nested.name"`
+		Age  int    `config:"nested.age"`
+	}
 }
 
 func main() {

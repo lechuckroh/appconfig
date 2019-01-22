@@ -30,8 +30,9 @@ func createTempFile(t *testing.T, name, content string) (string, func()) {
 
 func TestLoadConfig(t *testing.T) {
 	type config struct {
-		Name   string `config:"name"`
-		Age    int    `config:"age"`
+		Name   string   `config:"name"`
+		Age    int      `config:"age"`
+		Tags   []string `config:"tags"`
 		Nested struct {
 			Name string `config:"nested.name"`
 			Age  int    `config:"nested.age"`
@@ -42,9 +43,12 @@ func TestLoadConfig(t *testing.T) {
 		path, cleanup := createTempFile(t, "config.yaml", `
 name: "some name"
 age: 10
+tags:
+    - foo
+    - bar
 nested:
-   name: "nested name"
-   age: 20
+    name: "nested name"
+    age: 20
 `)
 		defer cleanup()
 
@@ -54,6 +58,7 @@ nested:
 		So(err, ShouldBeNil)
 		So(cfg.Name, ShouldEqual, "some name")
 		So(cfg.Age, ShouldEqual, 10)
+		So(cfg.Tags, ShouldResemble, []string{"foo", "bar"})
 		So(cfg.Nested.Name, ShouldEqual, "nested name")
 		So(cfg.Nested.Age, ShouldEqual, 20)
 	})
@@ -61,6 +66,7 @@ nested:
 	Convey("env", t, func() {
 		_ = os.Setenv("NAME", "some name")
 		_ = os.Setenv("AGE", "10")
+		_ = os.Setenv("TAGS", "foo,bar")
 		_ = os.Setenv("NESTED.NAME", "nested name")
 		_ = os.Setenv("NESTED.AGE", "20")
 
@@ -70,6 +76,7 @@ nested:
 		So(err, ShouldBeNil)
 		So(cfg.Name, ShouldEqual, "some name")
 		So(cfg.Age, ShouldEqual, 10)
+		So(cfg.Tags, ShouldResemble, []string{"foo", "bar"})
 		So(cfg.Nested.Name, ShouldEqual, "nested name")
 		So(cfg.Nested.Age, ShouldEqual, 20)
 	})

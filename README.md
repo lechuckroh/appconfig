@@ -28,6 +28,7 @@ appconfig.ConfigFilenamePrefix = "application"
 1. Environment variable.
     * Environment variable is read from `config` tag.
     * If field tag is `nested.first-name`, field value will be read from `NESTED.FIRST_NAME` environment variable if set.
+    * List items are separated by comma(`,`).
 1. Specified configFilename file (passed as `LoadConfig()` argument)
 1. `config/application-{profile}.yaml`
 1. `application-{profile}.yaml`
@@ -57,8 +58,9 @@ import (
 )
 
 type Config struct {
-	Name   string `config:"name"`
-	Age    int    `config:"age"`
+	Name   string   `config:"name"`
+	Age    int      `config:"age"`
+	Tags   []string `config:"tags"`
 	Nested struct {
 		Name string `config:"nested.name"`
 		Age  int    `config:"nested.age"`

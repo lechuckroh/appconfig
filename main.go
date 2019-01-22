@@ -3,12 +3,13 @@ package appconfig
 import (
 	"context"
 	"fmt"
-	"github.com/heetch/confita"
-	"github.com/heetch/confita/backend"
 	"github.com/heetch/confita/backend/env"
-	"github.com/heetch/confita/backend/file"
 	"os"
 	"time"
+
+	"github.com/heetch/confita"
+	"github.com/heetch/confita/backend"
+	"github.com/heetch/confita/backend/file"
 )
 
 // ActiveProfileEnvName represents environment name for active profile
@@ -30,19 +31,16 @@ func fileExists(filename string) bool {
 //
 // Configuration precedence:
 //
-// 1. Environment variable
+// 1. Specified 'configFilename' file
 //
-// 2. Specified 'configFilename' file
+// 2. 'config/application-{profile}.yaml'
 //
-// 3. 'config/application-{profile}.yaml'
+// 3. 'application-{profile}.yaml'
 //
 // 4. 'config/application.yaml'
 //
-// 5. 'application-{profile}.yaml'
+// 5. 'application.yaml'
 //
-// 6. 'application.yaml'
-//
-// 7. 'config/application-{profile}.yaml'
 func LoadConfig(configFilename string, to interface{}) ([]string, error) {
 	var lookupFiles []string
 	var loadFilenames []string
@@ -68,10 +66,7 @@ func LoadConfig(configFilename string, to interface{}) ([]string, error) {
 	)
 
 	// Backends
-	var backends []backend.Backend
-	{
-		env.NewBackend()
-	}
+	backends := []backend.Backend{env.NewBackend()}
 
 	for _, lookupFile := range lookupFiles {
 		if fileExists(lookupFile) {
@@ -83,7 +78,7 @@ func LoadConfig(configFilename string, to interface{}) ([]string, error) {
 	// Load configuration from backends
 	loader := confita.NewLoader(backends...)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Second)
 	defer cancel()
 
 	return loadFilenames, loader.Load(ctx, to)

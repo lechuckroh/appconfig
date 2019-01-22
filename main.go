@@ -66,14 +66,18 @@ func LoadConfig(configFilename string, to interface{}) ([]string, error) {
 	)
 
 	// Backends
-	backends := []backend.Backend{env.NewBackend()}
+	backends := make([]backend.Backend, 0)
 
-	for _, lookupFile := range lookupFiles {
+	// lower precedence file comes first
+	for i := len(lookupFiles)-1; i >= 0; i-- {
+		lookupFile := lookupFiles[i]
+
 		if fileExists(lookupFile) {
 			backends = append(backends, file.NewBackend(lookupFile))
 			loadFilenames = append(loadFilenames, lookupFile)
 		}
 	}
+	backends = append(backends, env.NewBackend())
 
 	// Load configuration from backends
 	loader := confita.NewLoader(backends...)

@@ -1,18 +1,28 @@
+[![Build Status](https://travis-ci.com/lechuckroh/appconfig.svg?branch=master)](https://travis-ci.com/lechuckroh/appconfig)
+
 # appconfig
 SpringBoot like profile based application configuration loader.
 
 See [confita](https://github.com/heetch/confita) for details.
 
 ## Settings
-### ActiveProfileEnvName
+#### `ActiveProfileEnvName`
 Environment variable name to specify active profile.
 
 Default value is `app.profiles.active`
 
-### ConfigFilenamePrefix
+```go
+appconfig.ActiveProfileEnvName = "app.profiles.active"
+```
+
+#### `ConfigFilenamePrefix`
 Configuration filename prefix.
 
 Default value is `application`.
+
+```go
+appconfig.ConfigFilenamePrefix = "application"
+```
 
 ## Load Precedence
 1. Environment variable.
@@ -64,16 +74,16 @@ func main() {
 	config := Config{}
 	loadedFilenames, err := appconfig.LoadConfig(configFilename, &config)
 	if err != nil {
-		fmt.Printf("Failed to load config: %s", err.Error())
+		fmt.Printf("Failed to load config: %s\n", err.Error())
 		return
 	}
 	for idx, filename := range loadedFilenames {
 		fmt.Printf("Configuration loaded: [%d] %s\n", idx+1, filename)
 	}
 	if len(loadedFilenames) == 0 {
-		fmt.Printf("No config file loaded")
+		fmt.Println("No config file loaded")
 	}
 
-	fmt.Printf("Config: %+v", config)
+	fmt.Printf("Config: %+v\n", config)
 }
 ```

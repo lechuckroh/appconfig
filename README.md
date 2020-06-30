@@ -27,7 +27,7 @@ appconfig.ConfigFilenamePrefix = "application"
 ## Load Precedence
 1. Environment variable.
     * Environment variable is read from `config` tag.
-    * If field tag is `nested.first-name`, field value will be read from `NESTED.FIRST_NAME` environment variable if set.
+    * If field tag is `nested.first-name`, field value will be read from `nested.first-name`, `NESTED_FIRST_NAME` environment variable if set.
     * List items are separated by comma(`,`).
 1. Specified configFilename file (passed as `LoadConfig()` argument)
 1. `config/application-{profile}.yaml`

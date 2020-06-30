@@ -3,7 +3,6 @@ package appconfig
 import (
 	"context"
 	"fmt"
-	"github.com/heetch/confita/backend/env"
 	"os"
 	"time"
 
@@ -69,7 +68,7 @@ func LoadConfig(configFilename string, to interface{}) ([]string, error) {
 	backends := make([]backend.Backend, 0)
 
 	// lower precedence file comes first
-	for i := len(lookupFiles)-1; i >= 0; i-- {
+	for i := len(lookupFiles) - 1; i >= 0; i-- {
 		lookupFile := lookupFiles[i]
 
 		if fileExists(lookupFile) {
@@ -77,7 +76,7 @@ func LoadConfig(configFilename string, to interface{}) ([]string, error) {
 			loadFilenames = append(loadFilenames, lookupFile)
 		}
 	}
-	backends = append(backends, env.NewBackend())
+	backends = append(backends, NewEnvBackend())
 
 	// Load configuration from backends
 	loader := confita.NewLoader(backends...)
